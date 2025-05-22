@@ -28,7 +28,7 @@ public class TestController {
     private final TestService testService;
 
      @GetMapping("/{id}") // 조회
-     public Test getTest(@PathVariable Long id) {
+     public Test getTest(@PathVariable("id") Long id) {
          return testService.getTest(id);
      }
 
@@ -43,12 +43,12 @@ public class TestController {
      }
 
      @PutMapping("/{id}") // 수정
-     public Long updateTest(@PathVariable Long id, @RequestBody TestDTO dto) {
+     public Long updateTest(@PathVariable("id") Long id, @RequestBody TestDTO dto) {
          return testService.updateTest(id, dto);
      }
 
      @DeleteMapping("/{id}") // 삭제
-     public void deleteTest(@PathVariable Long id) {
+     public void deleteTest(@PathVariable("id") Long id) {
          testService.deleteTest(id);
      }
 }
