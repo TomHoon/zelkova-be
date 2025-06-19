@@ -7,8 +7,8 @@ build/
 
 
 ### Spring Boot Properties ###
-application.properties
-application.yml
+.application.properties
+.application.yml
 
 ### STS ###
 .apt_generated
