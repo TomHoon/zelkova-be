@@ -3,16 +3,15 @@ package com.my.zelkova_back.member.dto;
 import java.time.LocalDate;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor
+@Builder
 @AllArgsConstructor
-public class FindIdRequest {
+public class ProfileResponse {
 
-	private String name;
-	private String phoneNumber;
+	private String introduction;
 	private LocalDate birthdate;
 	
 }

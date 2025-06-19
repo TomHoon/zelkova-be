@@ -1,6 +1,7 @@
 package com.my.zelkova_back.member.service;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 
 import org.springframework.stereotype.Service;
 
@@ -9,9 +10,11 @@ import com.my.zelkova_back.member.dto.FindIdRequest;
 import com.my.zelkova_back.member.dto.FindPwRequest;
 import com.my.zelkova_back.member.dto.JoinRequest;
 import com.my.zelkova_back.member.dto.LoginRequest;
+import com.my.zelkova_back.member.dto.ProfileResponse;
 import com.my.zelkova_back.member.dto.UpdateProfileRequest;
 import com.my.zelkova_back.member.entity.Member;
-import com.my.zelkova_back.member.exception.DuplicateUsernameException;
+import com.my.zelkova_back.member.exception.DuplicateException;
+import com.my.zelkova_back.member.exception.MemberNotFoundException;
 import com.my.zelkova_back.member.repository.MemberRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -43,17 +46,17 @@ public class MemberService {
 
 		// 중복 username 검사
 		if (memberRepository.existsByUsername(request.getUsername())) {
-			throw new DuplicateUsernameException("이미 존재하는 아이디입니다.");
+			throw new DuplicateException("이미 존재하는 아이디입니다.");
 		}
 		
 		// 중복 닉네임 검사
 		if (memberRepository.existsByNickname(request.getNickname())) {
-			throw new DuplicateUsernameException("이미 존재하는 닉네임입니다.");
+			throw new DuplicateException("이미 존재하는 닉네임입니다.");
 		}
 
 		// 중복 전화번호 검사
 		if (memberRepository.existsByPhoneNumber(request.getPhoneNumber())) {
-			throw new DuplicateUsernameException("이미 존재하는 전화번호 입니다.");
+			throw new DuplicateException("이미 존재하는 전화번호 입니다.");
 		}
 		
 
@@ -81,27 +84,54 @@ public class MemberService {
 	}
 
 	public Object login(LoginRequest request) {
-		// TODO Auto-generated method stub
+		// TODO 시큐리티 추가후 개발진행예정
 		return null;
 	}
 
-	public Object findId(FindIdRequest request) {
-		// TODO Auto-generated method stub
-		return null;
+	public String findId(FindIdRequest request) {
+		// 유효성 체크
+		if (request.getName() == null || request.getPhoneNumber() == null || request.getBirthdate() == null) {
+			throw new InvalidInputException("모든 값을 입력해주세요.");
+		}
+
+
+		// 회원 조회
+		Member member = memberRepository.findByNameAndPhoneNumberAndBirthdate(
+			request.getName(),
+			request.getPhoneNumber(),
+			request.getBirthdate()
+		).orElseThrow(() -> new MemberNotFoundException("일치하는 회원 정보가 없습니다."));
+
+		return member.getUsername();
 	}
+
 
 	public void sendResetPasswordMail(FindPwRequest request) {
-		// TODO Auto-generated method stub
+		// TODO 시큐리티 추가후 개발진행예정
 		
 	}
 
-	public Object getProfileById(Long id) {
-		// TODO Auto-generated method stub
-		return null;
+	public ProfileResponse getProfileByNickname(String nickname) {
+		// TODO 프로필 사진은 추후 확장 예정
+		
+		// 닉네임 유효성 체크
+		if (nickname == null || nickname.isBlank()) {
+			throw new InvalidInputException("닉네임을 입력해주세요.");
+		}
+
+		// 회원 조회
+		Member member = memberRepository.findByNickname(nickname)
+			.orElseThrow(() -> new MemberNotFoundException("해당 닉네임의 사용자를 찾을 수 없습니다."));
+
+		// 프로필 응답 생성
+		return ProfileResponse.builder()
+			.introduction(member.getIntroduction())
+			.birthdate(member.getBirthdate())
+			.build();
 	}
 
 	public void updateProfile(UpdateProfileRequest request) {
-		// TODO Auto-generated method stub
+		// TODO Profile 회의 후 추가예정
 		
 	}
 	
