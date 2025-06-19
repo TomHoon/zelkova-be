@@ -1,5 +1,4 @@
 package com.my.zelkova_back.post.entity;
-
 import java.time.LocalDateTime;
 
 import com.my.zelkova_back.user.entity.User;
@@ -22,12 +21,12 @@ import lombok.Setter;
 
 @Entity
 @Table(name = "post")
-@Getter @Setter
+
+@Getter 
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class Post {
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -58,3 +57,4 @@ public class Post {
 
 	private Integer viewCount = 0;
 }
+
