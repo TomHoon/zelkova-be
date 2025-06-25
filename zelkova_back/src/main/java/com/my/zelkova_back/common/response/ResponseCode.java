@@ -21,6 +21,11 @@ public enum ResponseCode {
 	DUPLICATE_EMAIL("ERROR1002", "이미 사용 중인 이메일입니다.", HttpStatus.BAD_REQUEST),
 	INVALID_PASSWORD("ERROR1003", "비밀번호가 일치하지 않습니다.", HttpStatus.BAD_REQUEST),
 	INVALID_EMAIL_FORMAT("ERROR1004", "이메일 형식이 올바르지 않습니다.", HttpStatus.BAD_REQUEST),
+	INVALID_USERNAME("ERROR1005", "아이디는 8자 이상이어야 합니다.", HttpStatus.BAD_REQUEST),
+	DUPLICATE_USERNAME("ERROR1006", "이미 존재하는 아이디입니다.", HttpStatus.CONFLICT),
+	DUPLICATE_NICKNAME("ERROR1007", "이미 존재하는 닉네임입니다.", HttpStatus.CONFLICT),
+	DUPLICATE_PHONE_NUMBER("ERROR1008", "이미 존재하는 전화번호입니다.", HttpStatus.CONFLICT),
+	INVALID_INPUT("ERROR1009", "입력값이 올바르지 않습니다.", HttpStatus.BAD_REQUEST),
 
 	// 인증/토큰 관련
 	INVALID_TOKEN("ERROR2001", "유효하지 않은 토큰입니다.", HttpStatus.UNAUTHORIZED),
