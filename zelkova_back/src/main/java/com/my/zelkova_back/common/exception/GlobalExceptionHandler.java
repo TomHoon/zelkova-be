@@ -24,7 +24,7 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<ApiResponse<?>> handleUnknownException(Exception ex) {
 		ex.printStackTrace();
-		ResponseCode code = ResponseCode.BAD_REQUEST;
+		ResponseCode code = ResponseCode.INTERNAL_SERVER_ERROR;
 		return ResponseEntity
 			.status(code.getStatus())
 			.body(ApiResponse.error(code));
