@@ -15,11 +15,11 @@ public class ApiResponse<T> {
 		return new ApiResponse<>(code.getCode(), code.getMessage(), data);
 	}
 
-	public static ApiResponse<?> success(ResponseCode code) {
+	public static <T> ApiResponse<T> success(ResponseCode code) {
 		return new ApiResponse<>(code.getCode(), code.getMessage(), null);
 	}
 
-	public static ApiResponse<?> error(ResponseCode code) {
+	public static <T> ApiResponse<T> error(ResponseCode code) {
 		return new ApiResponse<>(code.getCode(), code.getMessage(), null);
 	}
 
