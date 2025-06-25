@@ -3,15 +3,10 @@ package com.my.zelkova_back.reply.controller;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import com.my.zelkova_back.common.response.ApiResponse;
+import com.my.zelkova_back.common.response.ResponseCode;
 import com.my.zelkova_back.reply.dto.ReplyEditRequest;
 import com.my.zelkova_back.reply.dto.ReplyRequest;
 import com.my.zelkova_back.reply.dto.ReplyResponse;
@@ -27,25 +22,26 @@ public class ReplyController {
 	private final ReplyService replyService;
 
 	@GetMapping("/list")
-	public ResponseEntity<List<ReplyResponse>> list(@RequestParam("commentId") Long commentId) {
-		return ResponseEntity.ok(replyService.getRepliesByCommentId(commentId));
+	public ResponseEntity<ApiResponse<List<ReplyResponse>>> list(@RequestParam("commentId") Long commentId) {
+		List<ReplyResponse> replies = replyService.getRepliesByCommentId(commentId);
+		return ResponseEntity.ok(ApiResponse.success(ResponseCode.SUCCESS, replies));
 	}
 
 	@PostMapping("/write")
-	public ResponseEntity<?> write(@RequestBody ReplyRequest req) {
+	public ResponseEntity<ApiResponse<Void>> write(@RequestBody ReplyRequest req) {
 		replyService.writeReply(req);
-		return ResponseEntity.ok().build();
+		return ResponseEntity.ok(ApiResponse.success(ResponseCode.SUCCESS));
 	}
 
 	@PutMapping("/edit")
-	public ResponseEntity<?> edit(@RequestBody ReplyEditRequest req) {
+	public ResponseEntity<ApiResponse<Void>> edit(@RequestBody ReplyEditRequest req) {
 		replyService.editReply(req);
-		return ResponseEntity.ok().build();
+		return ResponseEntity.ok(ApiResponse.success(ResponseCode.SUCCESS));
 	}
 
 	@DeleteMapping("/delete")
-	public ResponseEntity<?> delete(@RequestParam("id") Long id) {
+	public ResponseEntity<ApiResponse<Void>> delete(@RequestParam("id") Long id) {
 		replyService.deleteReply(id);
-		return ResponseEntity.ok().build();
+		return ResponseEntity.ok(ApiResponse.success(ResponseCode.SUCCESS));
 	}
 }
