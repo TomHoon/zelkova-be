@@ -5,12 +5,14 @@ import java.time.LocalDate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.my.zelkova_back.auth.dto.LoginRequest;
+import com.my.zelkova_back.auth.dto.LoginResponse;
+import com.my.zelkova_back.auth.token.JwtUtil;
 import com.my.zelkova_back.common.exception.CustomException;
 import com.my.zelkova_back.common.response.ResponseCode;
 import com.my.zelkova_back.member.dto.FindIdRequest;
 import com.my.zelkova_back.member.dto.FindPwRequest;
 import com.my.zelkova_back.member.dto.JoinRequest;
-import com.my.zelkova_back.member.dto.LoginRequest;
 import com.my.zelkova_back.member.dto.ProfileResponse;
 import com.my.zelkova_back.member.dto.UpdateProfileRequest;
 import com.my.zelkova_back.member.entity.Member;
@@ -24,9 +26,8 @@ import lombok.RequiredArgsConstructor;
 public class MemberService {
 
 	private final MemberRepository memberRepository;
-
-	// 시큐리티 비밀번호 암호화 추가
 	private final PasswordEncoder passwordEncoder;
+	private final JwtUtil jwtUtil;
 
 	public String join(JoinRequest request) {
 
@@ -82,9 +83,22 @@ public class MemberService {
 		return "회원가입에 성공하였습니다!";
 	}
 
-	public Object login(LoginRequest request) {
-		return null;
+	public LoginResponse login(LoginRequest request) {
+		String username = request.getUsername();
+
+		Member member = memberRepository.findByUsername(username)
+			.orElseThrow(() -> new CustomException(ResponseCode.USER_NOT_FOUND));
+
+		if (!passwordEncoder.matches(request.getPassword(), member.getPassword())) {
+			throw new CustomException(ResponseCode.WRONG_PASSWORD);
+		}
+
+		String accessToken = jwtUtil.createAccessToken(username);
+		String refreshToken = jwtUtil.createRefreshToken(username);
+
+		return new LoginResponse(accessToken, refreshToken);
 	}
+
 
 	public String findId(FindIdRequest request) {
 		// 유효성 체크

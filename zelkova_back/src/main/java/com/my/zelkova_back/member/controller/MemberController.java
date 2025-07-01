@@ -3,12 +3,13 @@ package com.my.zelkova_back.member.controller;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.my.zelkova_back.auth.dto.LoginRequest;
+import com.my.zelkova_back.auth.dto.LoginResponse;
 import com.my.zelkova_back.common.response.ApiResponse;
 import com.my.zelkova_back.common.response.ResponseCode;
 import com.my.zelkova_back.member.dto.FindIdRequest;
 import com.my.zelkova_back.member.dto.FindPwRequest;
 import com.my.zelkova_back.member.dto.JoinRequest;
-import com.my.zelkova_back.member.dto.LoginRequest;
 import com.my.zelkova_back.member.dto.ProfileResponse;
 import com.my.zelkova_back.member.dto.UpdateProfileRequest;
 import com.my.zelkova_back.member.service.MemberService;
@@ -46,7 +47,7 @@ public class MemberController {
 	 * @return ResponseEntity<ApiResponse<?>> - 로그인 결과 및 토큰 정보
 	 */
 	@PostMapping("/login")
-	public ResponseEntity<ApiResponse<?>> login(@RequestBody LoginRequest request) {
+	public ResponseEntity<ApiResponse<LoginResponse>> login(@RequestBody LoginRequest request) {
 		return ResponseEntity.ok(ApiResponse.success(ResponseCode.SUCCESS, memberService.login(request)));
 	}
 
