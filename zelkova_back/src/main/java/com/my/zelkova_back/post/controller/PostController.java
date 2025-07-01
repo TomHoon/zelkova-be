@@ -2,9 +2,7 @@ package com.my.zelkova_back.post.controller;
 
 import com.my.zelkova_back.common.response.ApiResponse;
 import com.my.zelkova_back.common.response.ResponseCode;
-import com.my.zelkova_back.post.dto.PostRequestDto;
-import com.my.zelkova_back.post.dto.PostUpdateRequestDto;
-import com.my.zelkova_back.post.entity.Post;
+import com.my.zelkova_back.post.dto.*;
 import com.my.zelkova_back.post.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -19,40 +17,38 @@ public class PostController {
 
 	private final PostService postService;
 
+	// 게시글 목록 조회
 	@GetMapping("/list")
-	public ResponseEntity<ApiResponse<List<Post>>> getAllPosts() {
-		List<Post> posts = postService.getAllPosts();
+	public ResponseEntity<ApiResponse<List<PostResponse>>> getAllPosts() {
+		List<PostResponse> posts = postService.getAllPosts();
 		return ResponseEntity.ok(ApiResponse.success(ResponseCode.SUCCESS, posts));
 	}
 
-	// 현재 컨트롤러에서 예외 처리 중 서비스에서 CustomException 처리로 바꿔주세요.
-	@GetMapping("/detail/{id}")
-	public ResponseEntity<ApiResponse<Post>> getPostById(@PathVariable Long id) {
-		return postService.getPostById(id)
-			.map(post -> ResponseEntity.ok(ApiResponse.success(ResponseCode.SUCCESS, post)))
-			.orElse(ResponseEntity.status(ResponseCode.NOT_FOUND.getStatus())
-				.body(ApiResponse.error(ResponseCode.NOT_FOUND)));
-	}
-
-	@PostMapping("/write")
-	public ResponseEntity<ApiResponse<Post>> createPost(@RequestBody PostRequestDto requestDto) {
-		Post post = postService.createPost(
-			requestDto.getTitle(),
-			requestDto.getContent(),
-			requestDto.getWriter()
-		);
+	// 게시글 상세 조회
+	@GetMapping("/detail/{postId}")
+	public ResponseEntity<ApiResponse<PostDetailResponse>> getPostById(@PathVariable Long postId) {
+		PostDetailResponse post = postService.getPostById(postId);
 		return ResponseEntity.ok(ApiResponse.success(ResponseCode.SUCCESS, post));
 	}
 
+	// 게시글 작성
+	@PostMapping("/write")
+	public ResponseEntity<ApiResponse<PostDetailResponse>> createPost(@RequestBody PostRequest request) {
+		PostDetailResponse post = postService.createPost(request);
+		return ResponseEntity.ok(ApiResponse.success(ResponseCode.SUCCESS, post));
+	}
+
+	// 게시글 수정
 	@PutMapping("/edit")
-	public ResponseEntity<ApiResponse<Post>> updatePost(@RequestBody PostUpdateRequestDto dto) {
-		Post updatedPost = postService.updatePost(dto);
+	public ResponseEntity<ApiResponse<PostEditResponse>> updatePost(@RequestBody PostUpdateRequest request) {
+		PostEditResponse updatedPost = postService.updatePost(request);
 		return ResponseEntity.ok(ApiResponse.success(ResponseCode.SUCCESS, updatedPost));
 	}
 
-	@DeleteMapping("/deleted/{id}")
-	public ResponseEntity<ApiResponse<Void>> deletePost(@PathVariable Long id) {
-		postService.deletePost(id);
+	// 게시글 삭제
+	@DeleteMapping("/deleted/{postId}")
+	public ResponseEntity<ApiResponse<Void>> deletePost(@PathVariable Long postId) {
+		postService.deletePost(postId);
 		return ResponseEntity.ok(ApiResponse.success(ResponseCode.SUCCESS));
 	}
 }
