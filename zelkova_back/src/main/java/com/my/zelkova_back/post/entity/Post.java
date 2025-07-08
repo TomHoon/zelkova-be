@@ -1,5 +1,6 @@
 package com.my.zelkova_back.post.entity;
 
+import com.my.zelkova_back.member.entity.Member;
 import com.my.zelkova_back.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
@@ -22,8 +23,8 @@ public class Post {
 	private Long boardId;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "user_id", nullable = false)
-	private User user;
+	@JoinColumn(name = "member_id", nullable = false)
+	private Member member;
 
 	@Column(nullable = false, length = 100)
 	private String title;

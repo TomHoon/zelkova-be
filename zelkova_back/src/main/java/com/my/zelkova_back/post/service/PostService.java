@@ -2,6 +2,8 @@ package com.my.zelkova_back.post.service;
 
 import com.my.zelkova_back.common.exception.CustomException;
 import com.my.zelkova_back.common.response.ResponseCode;
+import com.my.zelkova_back.member.entity.Member;
+import com.my.zelkova_back.member.repository.MemberRepository;
 import com.my.zelkova_back.post.dto.*;
 import com.my.zelkova_back.post.entity.Post;
 import com.my.zelkova_back.post.repository.PostRepository;
@@ -19,7 +21,7 @@ import java.util.stream.Collectors;
 public class PostService {
 
     private final PostRepository postRepository;
-    private final UserRepository userRepository;
+    private final MemberRepository memberRepository;
 
     public List<PostResponse> getAllPosts() {
         return postRepository.findAll().stream()
@@ -34,12 +36,12 @@ public class PostService {
     }
 
     public PostDetailResponse createPost(PostRequest request) {
-        User user = userRepository.findById(request.getUserId())
+        Member member = memberRepository.findById(request.getMemberId())
                 .orElseThrow(() -> new CustomException(ResponseCode.USER_NOT_FOUND));
 
         Post post = Post.builder()
                 .boardId(request.getBoardId())
-                .user(user)
+                .member(member)
                 .title(request.getTitle())
                 .content(request.getContent())
                 .createdAt(LocalDateTime.now())
@@ -72,7 +74,7 @@ public class PostService {
         return PostResponse.builder()
                 .postId(post.getId())
                 .title(post.getTitle())
-                .writerName(post.getUser().getNickname())
+                .writerName(post.getMember().getNickname())
                 .createdAt(post.getCreatedAt())
                 .viewCount(post.getViewCount())
                 .build();

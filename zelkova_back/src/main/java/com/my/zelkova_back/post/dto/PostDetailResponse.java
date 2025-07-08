@@ -19,7 +19,7 @@ public class PostDetailResponse {
         response.postId = post.getId();
         response.title = post.getTitle();
         response.content = post.getContent();
-        response.writerName = post.getUser().getNickname();
+        response.writerName = post.getMember().getNickname();
         response.createdAt = post.getCreatedAt();
         response.viewCount = post.getViewCount();
         return response;

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.my.zelkova_back.comment.repository.CommentRepository;
+import com.my.zelkova_back.member.repository.MemberRepository;
 import com.my.zelkova_back.reply.dto.ReplyEditRequest;
 import com.my.zelkova_back.reply.dto.ReplyRequest;
 import com.my.zelkova_back.reply.dto.ReplyResponse;
@@ -21,14 +22,14 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ReplyServiceImpl implements ReplyService {
 	private final ReplyRepository replyRepository;
-	private final UserRepository userRepository;
+	private final MemberRepository memberRepository;
 	private final CommentRepository commentRepository;
 
 	@Override
 	public void writeReply(ReplyRequest request) {
 		Reply reply = Reply.builder()
 				.comment(commentRepository.findById(request.getCommentId()).orElseThrow())
-				.user(userRepository.findById(request.getUserId()).orElseThrow())
+				.member(memberRepository.findById(request.getMemberId()).orElseThrow())
 				.content(request.getContent())
 				.createdAt(LocalDateTime.now())
 				.isDeleted(false)
