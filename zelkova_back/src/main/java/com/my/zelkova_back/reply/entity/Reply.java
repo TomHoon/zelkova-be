@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import org.hibernate.annotations.ManyToAny;
 
 import com.my.zelkova_back.comment.entity.Comment;
+import com.my.zelkova_back.member.entity.Member;
 import com.my.zelkova_back.user.entity.User;
 
 import jakarta.persistence.Column;
@@ -38,8 +39,8 @@ public class Reply {
 	private Comment comment;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "user_id", nullable = false)
-	private User user;
+	@JoinColumn(name = "member_id", nullable = false)
+	private Member member;
 	
 	@Column(nullable=false, columnDefinition ="TEXT")
 	private String content;

@@ -3,6 +3,7 @@ package com.my.zelkova_back.comment.entity;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.my.zelkova_back.member.entity.Member;
 import com.my.zelkova_back.post.entity.Post;
 import com.my.zelkova_back.reply.entity.Reply;
 import com.my.zelkova_back.user.entity.User;
@@ -41,8 +42,8 @@ public class Comment {
 	private Post post;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "user_id", nullable = false)
-	private User user;
+	@JoinColumn(name = "member_id", nullable = false)
+	private Member member;
 
 	@Column(nullable = false, columnDefinition = "TEXT")
 	private String content;

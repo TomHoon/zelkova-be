@@ -9,7 +9,7 @@ import lombok.Getter;
 public class ReplyResponse {
 	private Long id;
 	private Long commentId;
-	private Long userId;
+	private Long memberId;
 	private String username;
 	private String content;
 	private String createdAt;
@@ -18,8 +18,8 @@ public class ReplyResponse {
 		return ReplyResponse.builder()
 				.id(reply.getId())
 				.commentId(reply.getComment().getId())
-				.userId(reply.getUser().getId())
-				.username(reply.getUser().getUsername())
+				.memberId(reply.getMember().getId())
+				.username(reply.getMember().getUsername())
 				.content(reply.getContent())
 				.createdAt(reply.getCreatedAt().toString())
 				.build();

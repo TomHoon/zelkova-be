@@ -11,6 +11,8 @@ import com.my.zelkova_back.comment.dto.CommentRequest;
 import com.my.zelkova_back.comment.dto.CommentResponse;
 import com.my.zelkova_back.comment.entity.Comment;
 import com.my.zelkova_back.comment.repository.CommentRepository;
+import com.my.zelkova_back.member.entity.Member;
+import com.my.zelkova_back.member.repository.MemberRepository;
 import com.my.zelkova_back.post.entity.Post;
 import com.my.zelkova_back.post.repository.PostRepository;
 import com.my.zelkova_back.user.entity.User;
@@ -24,16 +26,16 @@ public class CommentServiceImpl implements CommentService {
 
 	private final CommentRepository commentRepository;
 	private final PostRepository postRepository;
-	private final UserRepository userRepository;
+	private final MemberRepository memberRepository;
 	
 	@Override
 	public void writeComment(CommentRequest req) {
 		Post post=postRepository.findById(req.getPostId()).orElseThrow();
-		User user=userRepository.findById(req.getUserId()).orElseThrow();
+		Member member=memberRepository.findById(req.getUserId()).orElseThrow();
 		
 		Comment comment = Comment.builder()
 				.post(post)
-				.user(user)
+				.member(member)
 				.content(req.getContent())
 				.createdAt(LocalDateTime.now())
 				.isDeleted(false)

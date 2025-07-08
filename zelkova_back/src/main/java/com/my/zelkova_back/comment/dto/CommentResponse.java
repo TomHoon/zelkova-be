@@ -27,8 +27,8 @@ public class CommentResponse {
 		return CommentResponse.builder()
 				.id(comment.getId())
 				.postId(comment.getPost().getId())
-				.userId(comment.getUser().getId())
-				.username(comment.getUser().getUsername())
+				.userId(comment.getMember().getId())
+				.username(comment.getMember().getUsername())
 				.content(comment.getContent())
 				.createdAt(comment.getCreatedAt().toString())
 				.build();
