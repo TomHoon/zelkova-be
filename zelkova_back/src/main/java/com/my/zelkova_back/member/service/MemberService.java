@@ -2,6 +2,7 @@ package com.my.zelkova_back.member.service;
 
 import java.time.LocalDate;
 
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -17,8 +18,10 @@ import com.my.zelkova_back.member.dto.ProfileResponse;
 import com.my.zelkova_back.member.dto.UpdateProfileRequest;
 import com.my.zelkova_back.member.entity.Member;
 import com.my.zelkova_back.member.entity.Role;
+import com.my.zelkova_back.member.entity.State;
 import com.my.zelkova_back.member.repository.MemberRepository;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -138,4 +141,21 @@ public class MemberService {
 
 	public void updateProfile(UpdateProfileRequest request) {
 	}
+
+	@Transactional
+	public String withdrawMember(UserDetails userDetails) {
+		String username = userDetails.getUsername();
+
+		Member member = memberRepository.findByUsername(username)
+			.orElseThrow(() -> new CustomException(ResponseCode.USER_NOT_FOUND));
+
+		if (member.getState() == State.WITHDRAWN) {
+			throw new CustomException(ResponseCode.ALREADY_WITHDRAWN);
+		}
+
+		member.withdraw();
+
+		return "회원 탈퇴가 완료되었습니다.";
+	}
+
 }
