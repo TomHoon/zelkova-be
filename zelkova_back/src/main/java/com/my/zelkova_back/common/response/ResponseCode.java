@@ -27,6 +27,7 @@ public enum ResponseCode {
 	DUPLICATE_PHONE_NUMBER("ERROR1008", "이미 존재하는 전화번호입니다.", HttpStatus.CONFLICT),
 	INVALID_INPUT("ERROR1009", "입력값이 올바르지 않습니다.", HttpStatus.BAD_REQUEST),
 	WRONG_PASSWORD("ERROR1010", "비밀번호가 일치하지 않습니다.", HttpStatus.BAD_REQUEST),
+	ALREADY_WITHDRAWN("ERROR1011", "이미 탈퇴상태인 회원입니다.", HttpStatus.BAD_REQUEST),
 	
 	// 인증/토큰 관련
 	INVALID_TOKEN("ERROR2001", "유효하지 않은 토큰입니다.", HttpStatus.UNAUTHORIZED),
