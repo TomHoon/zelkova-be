@@ -29,10 +29,12 @@ public class CommentServiceImpl implements CommentService {
 	private final MemberRepository memberRepository;
 	
 	@Override
-	public void writeComment(CommentRequest req) {
-		Post post=postRepository.findById(req.getPostId()).orElseThrow();
-		Member member=memberRepository.findById(req.getUserId()).orElseThrow();
-		
+	public void writeComment(CommentRequest req, String username) {
+		Post post = postRepository.findById(req.getPostId())
+				.orElseThrow(() -> new IllegalArgumentException("게시글 없음"));
+
+		Member member = memberRepository.findByUsername(username)
+				.orElseThrow(() -> new IllegalArgumentException("사용자 없음"));
 		Comment comment = Comment.builder()
 				.post(post)
 				.member(member)

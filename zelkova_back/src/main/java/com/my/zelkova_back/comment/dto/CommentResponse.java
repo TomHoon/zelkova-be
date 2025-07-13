@@ -18,7 +18,7 @@ import lombok.Setter;
 public class CommentResponse {
 	private Long id;
 	private Long postId;
-	private Long userId;
+	private Long memberId;
 	private String username;
 	private String content;
 	private String createdAt;
@@ -27,7 +27,7 @@ public class CommentResponse {
 		return CommentResponse.builder()
 				.id(comment.getId())
 				.postId(comment.getPost().getId())
-				.userId(comment.getMember().getId())
+				.memberId(comment.getMember().getId())
 				.username(comment.getMember().getUsername())
 				.content(comment.getContent())
 				.createdAt(comment.getCreatedAt().toString())

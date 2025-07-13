@@ -7,7 +7,6 @@ import lombok.Setter;
 @Setter
 public class PostRequest {
     private Long boardId;
-    private Long memberId;
     private String title;
     private String content;
 }

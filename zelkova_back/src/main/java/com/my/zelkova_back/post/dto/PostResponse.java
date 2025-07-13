@@ -12,4 +12,5 @@ public class PostResponse {
     private String writerName;
     private LocalDateTime createdAt;
     private Integer viewCount;
+    private Long boardId;
 }
