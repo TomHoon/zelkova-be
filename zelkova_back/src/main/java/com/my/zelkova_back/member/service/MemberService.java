@@ -141,7 +141,7 @@ public class MemberService {
 
 	public void updateProfile(UpdateProfileRequest request) {
 	}
-<<<<<<< Updated upstream
+
 
 	@Transactional
 	public String withdrawMember(UserDetails userDetails) {
@@ -159,11 +159,11 @@ public class MemberService {
 		return "회원 탈퇴가 완료되었습니다.";
 	}
 
-=======
+
 	
 	public Member findByUsername(String username) {
 	    return memberRepository.findByUsername(username)
 	            .orElseThrow(() -> new CustomException(ResponseCode.USER_NOT_FOUND));
 	}
->>>>>>> Stashed changes
+
 }
