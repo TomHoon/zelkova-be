@@ -33,21 +33,22 @@ public class SecurityConfig {
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http
-			.csrf(csrf -> csrf.disable())
-			.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-			.authorizeHttpRequests(auth -> auth
-				.requestMatchers(
-					"/v3/api-docs/**",
-					"/swagger-ui/**",
-					"/api/v1/member/login",
-					"/api/v1/member/join"
-				).permitAll()
-				.anyRequest().authenticated()
-			)
-			.addFilterBefore(
-				new JwtAuthenticationFilter(jwtUtil, userDetailsService),
-				UsernamePasswordAuthenticationFilter.class
-			);
+				.cors(cors -> {
+				})
+				.csrf(csrf -> csrf.disable())
+				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+				.authorizeHttpRequests(auth -> auth
+						.requestMatchers(
+								"/v3/api-docs/**",
+								"/swagger-ui/**",
+								"/api/v1/member/login",
+								"/api/v1/member/join",
+								"/api/v1/member/kakao-login")
+						.permitAll()
+						.anyRequest().authenticated())
+				.addFilterBefore(
+						new JwtAuthenticationFilter(jwtUtil, userDetailsService),
+						UsernamePasswordAuthenticationFilter.class);
 
 		return http.build();
 	}
