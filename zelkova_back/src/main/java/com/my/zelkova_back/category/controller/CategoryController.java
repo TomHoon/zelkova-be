@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.my.zelkova_back.category.dto.HeaderResponse;
 import com.my.zelkova_back.category.entity.Category;
 import com.my.zelkova_back.category.service.CategoryService;
 import com.my.zelkova_back.common.response.ApiResponse;
@@ -23,5 +24,12 @@ public class CategoryController {
     @GetMapping("/list")
     public ResponseEntity<ApiResponse<List<Category>>> list() {
     	return ResponseEntity.ok(ApiResponse.success(ResponseCode.SUCCESS, categoryService.getAllCategories()));
+    }
+    
+    @GetMapping("/header")
+    public ResponseEntity<ApiResponse<List<HeaderResponse>>> getHeaderCategoryList() {
+        return ResponseEntity.ok(
+            ApiResponse.success(ResponseCode.SUCCESS, categoryService.getHeaderResponseList())
+        );
     }
 }
