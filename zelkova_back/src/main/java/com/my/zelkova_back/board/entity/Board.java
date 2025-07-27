@@ -33,5 +33,5 @@ public class Board {
     private String name;
     
     @Column(nullable = false)
-	private String boardUrl;
+	private String url;
 }

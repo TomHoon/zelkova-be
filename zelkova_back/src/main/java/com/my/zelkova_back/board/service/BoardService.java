@@ -17,4 +17,9 @@ public class BoardService {
     public List<Board> getAllBoards() {
         return boardRepository.findAll();
     }
+
+	public List<Board> getHeaderList() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
