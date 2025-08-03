@@ -142,6 +142,7 @@ public class MemberService {
 	public void updateProfile(UpdateProfileRequest request) {
 	}
 
+
 	@Transactional
 	public String withdrawMember(UserDetails userDetails) {
 		String username = userDetails.getUsername();
@@ -156,6 +157,13 @@ public class MemberService {
 		member.withdraw();
 
 		return "회원 탈퇴가 완료되었습니다.";
+	}
+
+
+	
+	public Member findByUsername(String username) {
+	    return memberRepository.findByUsername(username)
+	            .orElseThrow(() -> new CustomException(ResponseCode.USER_NOT_FOUND));
 	}
 
 }
