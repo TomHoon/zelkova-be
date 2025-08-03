@@ -33,6 +33,8 @@ public class SecurityConfig {
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http
+			.cors()
+			.and()
 			.csrf(csrf -> csrf.disable())
 			.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 			.authorizeHttpRequests(auth -> auth
@@ -42,6 +44,10 @@ public class SecurityConfig {
 					"/api/v1/member/login",
 					"/api/v1/member/join",
 					"/api/v1/category/header"
+					"/api/v1/post/list",
+					"/api/v1/post/detail/**",
+					"/api/v1/comment/list/**",
+					"/api/v1/post/nav/**"
 				).permitAll()
 				.anyRequest().authenticated()
 			)

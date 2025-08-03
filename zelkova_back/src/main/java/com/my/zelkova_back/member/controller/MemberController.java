@@ -3,7 +3,17 @@ package com.my.zelkova_back.member.controller;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
+
 import org.springframework.web.bind.annotation.*;
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 
 import com.my.zelkova_back.auth.dto.LoginRequest;
 import com.my.zelkova_back.auth.dto.LoginResponse;
@@ -12,8 +22,10 @@ import com.my.zelkova_back.common.response.ResponseCode;
 import com.my.zelkova_back.member.dto.FindIdRequest;
 import com.my.zelkova_back.member.dto.FindPwRequest;
 import com.my.zelkova_back.member.dto.JoinRequest;
+import com.my.zelkova_back.member.dto.MeResponse;
 import com.my.zelkova_back.member.dto.ProfileResponse;
 import com.my.zelkova_back.member.dto.UpdateProfileRequest;
+import com.my.zelkova_back.member.entity.Member;
 import com.my.zelkova_back.member.service.MemberService;
 
 import lombok.RequiredArgsConstructor;
@@ -122,5 +134,18 @@ public class MemberController {
 	public ResponseEntity<ApiResponse<String>> updateProfile(@RequestBody UpdateProfileRequest request) {
 		memberService.updateProfile(request);
 		return ResponseEntity.ok(ApiResponse.success(ResponseCode.SUCCESS, "프로필 수정 완료"));
+	}
+	/**
+	 * [자신 프로필 조회]
+	 * 게시판 작성자 이름 확인 시 자신의 닉네임을 확인할 수 있다
+	 * 
+	 * @param userDetails
+	 * @return
+	 */
+	@GetMapping("/me")
+	public ResponseEntity<ApiResponse<MeResponse>> getMyInfo(@AuthenticationPrincipal UserDetails userDetails) {
+	    String username = userDetails.getUsername();
+	    Member member = memberService.findByUsername(username); // 직접 조회
+	    return ResponseEntity.ok(ApiResponse.success(ResponseCode.SUCCESS, MeResponse.from(member)));
 	}
 }
