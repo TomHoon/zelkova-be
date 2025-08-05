@@ -13,7 +13,7 @@ import lombok.Setter;
 @Builder
 public class CommentRequest {
 	private Long postId;
-	private Long userId;
+	private Long memberId;
 	private String content;
 
 	

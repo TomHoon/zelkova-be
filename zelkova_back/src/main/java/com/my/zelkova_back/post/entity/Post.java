@@ -40,6 +40,7 @@ public class Post {
 
 	private LocalDateTime deletedAt;
 
+	@Builder.Default
 	@Column(nullable = false)
 	private Boolean isDeleted = false;
 
