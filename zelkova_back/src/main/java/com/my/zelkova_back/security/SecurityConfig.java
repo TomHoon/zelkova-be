@@ -33,22 +33,28 @@ public class SecurityConfig {
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http
-				.cors(cors -> {
-				})
-				.csrf(csrf -> csrf.disable())
-				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-				.authorizeHttpRequests(auth -> auth
-						.requestMatchers(
-								"/v3/api-docs/**",
-								"/swagger-ui/**",
-								"/api/v1/member/login",
-								"/api/v1/member/join",
-								"/api/v1/member/kakao-login")
-						.permitAll()
-						.anyRequest().authenticated())
-				.addFilterBefore(
-						new JwtAuthenticationFilter(jwtUtil, userDetailsService),
-						UsernamePasswordAuthenticationFilter.class);
+			.cors()
+			.and()
+			.csrf(csrf -> csrf.disable())
+			.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+			.authorizeHttpRequests(auth -> auth
+				.requestMatchers(
+					"/v3/api-docs/**",
+					"/swagger-ui/**",
+					"/api/v1/member/login",
+					"/api/v1/member/join",
+					"/api/v1/category/header"
+					"/api/v1/post/list",
+					"/api/v1/post/detail/**",
+					"/api/v1/comment/list/**",
+					"/api/v1/post/nav/**"
+				).permitAll()
+				.anyRequest().authenticated()
+			)
+			.addFilterBefore(
+				new JwtAuthenticationFilter(jwtUtil, userDetailsService),
+				UsernamePasswordAuthenticationFilter.class
+			);
 
 		return http.build();
 	}

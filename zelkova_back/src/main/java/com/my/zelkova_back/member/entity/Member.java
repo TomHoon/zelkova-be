@@ -79,4 +79,9 @@ public class Member {
 
 	// FK 연결 예정
 	private Long profileFileId;
+	
+	
+	public void withdraw() {
+		this.state = State.WITHDRAWN;
+	}
 }

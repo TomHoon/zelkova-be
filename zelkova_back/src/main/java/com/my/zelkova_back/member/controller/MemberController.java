@@ -1,8 +1,22 @@
 package com.my.zelkova_back.member.controller;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import org.springframework.web.bind.annotation.*;
 
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+
+import com.my.zelkova_back.auth.dto.LoginRequest;
+import com.my.zelkova_back.auth.dto.LoginResponse;
 import com.my.zelkova_back.common.response.ApiResponse;
 import com.my.zelkova_back.common.response.ResponseCode;
 import com.my.zelkova_back.member.dto.FindIdRequest;
@@ -10,8 +24,10 @@ import com.my.zelkova_back.member.dto.FindPwRequest;
 import com.my.zelkova_back.member.dto.JoinRequest;
 import com.my.zelkova_back.member.dto.KakaoLoginRequest;
 import com.my.zelkova_back.member.dto.LoginRequest;
+import com.my.zelkova_back.member.dto.MeResponse;
 import com.my.zelkova_back.member.dto.ProfileResponse;
 import com.my.zelkova_back.member.dto.UpdateProfileRequest;
+import com.my.zelkova_back.member.entity.Member;
 import com.my.zelkova_back.member.service.MemberService;
 
 import lombok.RequiredArgsConstructor;
@@ -45,10 +61,10 @@ public class MemberController {
 	 * 아이디와 비밀번호를 받아 로그인 처리 및 토큰을 반환합니다.
 	 *
 	 * @param request LoginRequest
-	 * @return ResponseEntity<ApiResponse<?>> - 로그인 결과 및 토큰 정보
+	 * @return ResponseEntity<ApiResponse<LoginResponse>> - 토큰 정보
 	 */
 	@PostMapping("/login")
-	public ResponseEntity<ApiResponse<?>> login(@RequestBody LoginRequest request) {
+	public ResponseEntity<ApiResponse<LoginResponse>> login(@RequestBody LoginRequest request) {
 		return ResponseEntity.ok(ApiResponse.success(ResponseCode.SUCCESS, memberService.login(request)));
 	}
 
@@ -84,14 +100,12 @@ public class MemberController {
 	 * [회원 탈퇴]
 	 * 로그인된 사용자의 회원 탈퇴를 처리합니다.
 	 * 
-	 * TODO:
-	 * - @AuthenticationPrincipal UserDetails userDetails 추가 예정
-	 * 
+	 * @param userDetails 로그인된 사용자 정보 (Spring Security 주입)
 	 * @return ResponseEntity<ApiResponse<String>> - 탈퇴 완료 메시지
 	 */
 	@PutMapping("/withdraw")
-	public ResponseEntity<ApiResponse<String>> withdraw() {
-		return ResponseEntity.ok(ApiResponse.success(ResponseCode.SUCCESS, "회원 탈퇴 처리 완료"));
+	public ResponseEntity<ApiResponse<String>> withdraw(@AuthenticationPrincipal UserDetails userDetails) {
+		return ResponseEntity.ok(ApiResponse.success(ResponseCode.SUCCESS, memberService.withdrawMember(userDetails)));
 	}
 
 	/**
@@ -125,9 +139,20 @@ public class MemberController {
 		memberService.updateProfile(request);
 		return ResponseEntity.ok(ApiResponse.success(ResponseCode.SUCCESS, "프로필 수정 완료"));
 	}
-
 	@PostMapping("/kakao-login")
 	public ResponseEntity<ApiResponse<?>> kakaoLogin(@RequestBody KakaoLoginRequest request) {
 		return ResponseEntity.ok(ApiResponse.success(ResponseCode.SUCCESS, memberService.kakaoLogin(request)));
+	/**
+	 * [자신 프로필 조회]
+	 * 게시판 작성자 이름 확인 시 자신의 닉네임을 확인할 수 있다
+	 * 
+	 * @param userDetails
+	 * @return
+	 */
+	@GetMapping("/me")
+	public ResponseEntity<ApiResponse<MeResponse>> getMyInfo(@AuthenticationPrincipal UserDetails userDetails) {
+	    String username = userDetails.getUsername();
+	    Member member = memberService.findByUsername(username); // 직접 조회
+	    return ResponseEntity.ok(ApiResponse.success(ResponseCode.SUCCESS, MeResponse.from(member)));
 	}
 }
