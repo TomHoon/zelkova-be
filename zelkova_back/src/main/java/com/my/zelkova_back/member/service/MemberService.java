@@ -1,19 +1,33 @@
 package com.my.zelkova_back.member.service;
 
-import com.my.zelkova_back.member.dto.*;
+import com.my.zelkova_back.auth.dto.LoginRequest; // 로그인 요청 DTO
+import com.my.zelkova_back.auth.dto.LoginResponse; // 로그인 응답 DTO
+import com.my.zelkova_back.member.dto.FindIdRequest;
+import com.my.zelkova_back.member.dto.FindPwRequest;
+import com.my.zelkova_back.member.dto.JoinRequest;
+import com.my.zelkova_back.member.dto.KakaoLoginRequest; // 카카오 로그인 요청 DTO
+import com.my.zelkova_back.member.dto.ProfileResponse;
+import com.my.zelkova_back.member.dto.UpdateProfileRequest;
+import com.my.zelkova_back.member.entity.Member; // Member 엔티티
+import org.springframework.security.core.userdetails.UserDetails;
 
 public interface MemberService {
-	String join(JoinRequest request);
 
-	Object login(LoginRequest request);
+    String join(JoinRequest request); // 회원가입
 
-	String findId(FindIdRequest request);
+    LoginResponse login(LoginRequest request); // 일반 로그인
 
-	void sendResetPasswordMail(FindPwRequest request);
+    String findId(FindIdRequest request); // 아이디 찾기
 
-	ProfileResponse getProfileByNickname(String nickname);
+    void sendResetPasswordMail(FindPwRequest request); // 비밀번호 초기화 메일
 
-	void updateProfile(UpdateProfileRequest request);
+    ProfileResponse getProfileByNickname(String nickname); // 닉네임으로 프로필 조회
 
-	Object kakaoLogin(KakaoLoginRequest request);
+    void updateProfile(UpdateProfileRequest request); // 프로필 수정
+  
+    Object kakaoLogin(KakaoLoginRequest request); // 카카오 로그인
+
+    String withdrawMember(UserDetails userDetails); // 회원 탈퇴
+
+    Member findByUsername(String username); // 유저 이름으로 Member 조회
 }
