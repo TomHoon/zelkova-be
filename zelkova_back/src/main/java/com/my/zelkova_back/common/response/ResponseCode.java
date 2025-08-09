@@ -34,6 +34,16 @@ public enum ResponseCode {
 	EXPIRED_TOKEN("ERROR2002", "토큰이 만료되었습니다.", HttpStatus.UNAUTHORIZED),
 	ACCESS_DENIED("ERROR2003", "권한이 없습니다.", HttpStatus.FORBIDDEN),
 
+	// 파일 업로드/다운로드 관련
+    FILE_EMPTY("ERROR3001", "업로드할 파일이 비어 있습니다.", HttpStatus.BAD_REQUEST),
+    FILE_EXTENSION_NOT_ALLOWED("ERROR3002", "허용되지 않은 파일 형식입니다.", HttpStatus.UNSUPPORTED_MEDIA_TYPE),
+    FILE_UPLOAD_FAILED("ERROR3003", "파일 업로드에 실패했습니다.", HttpStatus.INTERNAL_SERVER_ERROR),
+    FILE_DOWNLOAD_FAILED("ERROR3004", "파일 다운로드에 실패했습니다.", HttpStatus.INTERNAL_SERVER_ERROR),
+    FILE_NOT_FOUND_ERROR("ERROR3005", "요청한 파일을 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
+    FILE_PERMISSION_DENIED("ERROR3006", "파일 시스템 권한이 없습니다.", HttpStatus.FORBIDDEN),
+    FILE_DIRECTORY_CREATE_FAILED("ERROR3007", "업로드 디렉터리 생성에 실패했습니다.", HttpStatus.INTERNAL_SERVER_ERROR),
+    FILE_DELETE_FAILED("ERROR3008", "파일 삭제에 실패했습니다.", HttpStatus.INTERNAL_SERVER_ERROR),
+    
 	// 서버 오류
 	INTERNAL_SERVER_ERROR("ERROR500", "서버 오류가 발생했습니다.", HttpStatus.INTERNAL_SERVER_ERROR);
 
