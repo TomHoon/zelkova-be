@@ -33,10 +33,10 @@ public class Member {
 	@Column(nullable = false, length = 255)
 	private String password;
 
-	@Column(nullable = false, unique = true, length = 20)
+	@Column(nullable = true, unique = true, length = 20)
 	private String phoneNumber;
 
-	@Column(nullable = false, unique = true, length = 20)
+	@Column(nullable = true, unique = true, length = 20)
 	private String nickname;
 
 	@Column(length = 30)
@@ -44,10 +44,10 @@ public class Member {
 
 	private LocalDate birthdate;
 
-	@Column(nullable = false, length = 50)
+	@Column(nullable = true, length = 50)
 	private String name;
 
-	@Column(nullable = false, length = 50)
+	@Column(nullable = true, length = 50)
 	private String mobileCarrier;
 
 	@Column(length = 100)

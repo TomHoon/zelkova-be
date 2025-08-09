@@ -22,6 +22,8 @@ import com.my.zelkova_back.common.response.ResponseCode;
 import com.my.zelkova_back.member.dto.FindIdRequest;
 import com.my.zelkova_back.member.dto.FindPwRequest;
 import com.my.zelkova_back.member.dto.JoinRequest;
+import com.my.zelkova_back.member.dto.KakaoLoginRequest;
+import com.my.zelkova_back.member.dto.LoginRequest;
 import com.my.zelkova_back.member.dto.MeResponse;
 import com.my.zelkova_back.member.dto.ProfileResponse;
 import com.my.zelkova_back.member.dto.UpdateProfileRequest;
@@ -32,6 +34,7 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/v1/member")
+@CrossOrigin(origins = "http://localhost:3000")
 @RequiredArgsConstructor
 public class MemberController {
 
@@ -44,9 +47,9 @@ public class MemberController {
 	 * @param request JoinRequest
 	 * @return ResponseEntity<ApiResponse<String>> - 회원가입 완료 메시지
 	 * 
-	 * TODO:
-	 * - 유효성 검증(@Valid) 적용 예정
-	 * - 비밀번호 암호화 여부 확인
+	 *         TODO:
+	 *         - 유효성 검증(@Valid) 적용 예정
+	 *         - 비밀번호 암호화 여부 확인
 	 */
 	@PostMapping("/join")
 	public ResponseEntity<ApiResponse<String>> join(@RequestBody JoinRequest request) {
@@ -72,8 +75,8 @@ public class MemberController {
 	 * @param request FindIdRequest - 이름, 전화번호, 생년월일 정보를 포함한 요청 객체
 	 * @return ResponseEntity<ApiResponse<String>> - 가입된 아이디(username)
 	 * 
-	 * TODO:
-	 * - 입력값 유효성 검사 고도화 예정
+	 *         TODO:
+	 *         - 입력값 유효성 검사 고도화 예정
 	 */
 	@PostMapping("/find/id")
 	public ResponseEntity<ApiResponse<String>> findId(@RequestBody FindIdRequest request) {
@@ -112,12 +115,13 @@ public class MemberController {
 	 * @param nickname 조회할 사용자 닉네임
 	 * @return ResponseEntity<ApiResponse<ProfileResponse>> - 자기소개, 생년월일 정보 포함
 	 * 
-	 * TODO:
-	 * - 프로필 사진 기능 확장 예정
+	 *         TODO:
+	 *         - 프로필 사진 기능 확장 예정
 	 */
 	@GetMapping("/profile/{nickname}")
 	public ResponseEntity<ApiResponse<ProfileResponse>> viewProfile(@PathVariable String nickname) {
-		return ResponseEntity.ok(ApiResponse.success(ResponseCode.SUCCESS, memberService.getProfileByNickname(nickname)));
+		return ResponseEntity
+				.ok(ApiResponse.success(ResponseCode.SUCCESS, memberService.getProfileByNickname(nickname)));
 	}
 
 	/**
@@ -135,6 +139,9 @@ public class MemberController {
 		memberService.updateProfile(request);
 		return ResponseEntity.ok(ApiResponse.success(ResponseCode.SUCCESS, "프로필 수정 완료"));
 	}
+	@PostMapping("/kakao-login")
+	public ResponseEntity<ApiResponse<?>> kakaoLogin(@RequestBody KakaoLoginRequest request) {
+		return ResponseEntity.ok(ApiResponse.success(ResponseCode.SUCCESS, memberService.kakaoLogin(request)));
 	/**
 	 * [자신 프로필 조회]
 	 * 게시판 작성자 이름 확인 시 자신의 닉네임을 확인할 수 있다

@@ -1,169 +1,33 @@
 package com.my.zelkova_back.member.service;
 
-import java.time.LocalDate;
-
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-
-import com.my.zelkova_back.auth.dto.LoginRequest;
-import com.my.zelkova_back.auth.dto.LoginResponse;
-import com.my.zelkova_back.auth.token.JwtUtil;
-import com.my.zelkova_back.common.exception.CustomException;
-import com.my.zelkova_back.common.response.ResponseCode;
+import com.my.zelkova_back.auth.dto.LoginRequest; // 로그인 요청 DTO
+import com.my.zelkova_back.auth.dto.LoginResponse; // 로그인 응답 DTO
 import com.my.zelkova_back.member.dto.FindIdRequest;
 import com.my.zelkova_back.member.dto.FindPwRequest;
 import com.my.zelkova_back.member.dto.JoinRequest;
+import com.my.zelkova_back.member.dto.KakaoLoginRequest; // 카카오 로그인 요청 DTO
 import com.my.zelkova_back.member.dto.ProfileResponse;
 import com.my.zelkova_back.member.dto.UpdateProfileRequest;
-import com.my.zelkova_back.member.entity.Member;
-import com.my.zelkova_back.member.entity.Role;
-import com.my.zelkova_back.member.entity.State;
-import com.my.zelkova_back.member.repository.MemberRepository;
+import com.my.zelkova_back.member.entity.Member; // Member 엔티티
+import org.springframework.security.core.userdetails.UserDetails;
 
-import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
+public interface MemberService {
 
-@Service
-@RequiredArgsConstructor
-public class MemberService {
+    String join(JoinRequest request); // 회원가입
 
-	private final MemberRepository memberRepository;
-	private final PasswordEncoder passwordEncoder;
-	private final JwtUtil jwtUtil;
+    LoginResponse login(LoginRequest request); // 일반 로그인
 
-	public String join(JoinRequest request) {
+    String findId(FindIdRequest request); // 아이디 찾기
 
-		// 아이디 자릿수 검사
-		if (request.getUsername().length() < 8) {
-			throw new CustomException(ResponseCode.INVALID_USERNAME);
-		}
+    void sendResetPasswordMail(FindPwRequest request); // 비밀번호 초기화 메일
 
-		// 이메일 유효성 검사
-		if (!request.getEmail().matches("^[a-zA-Z0-9]+@([a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,}$")) {
-			throw new CustomException(ResponseCode.INVALID_EMAIL_FORMAT);
-		}
+    ProfileResponse getProfileByNickname(String nickname); // 닉네임으로 프로필 조회
 
-		if (!request.getPassword().matches("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[!@#$%^&*()_+=-]).{8,72}$")) {
-			throw new CustomException(ResponseCode.INVALID_PASSWORD);
-		}
+    void updateProfile(UpdateProfileRequest request); // 프로필 수정
 
-		// 중복 username 검사
-		if (memberRepository.existsByUsername(request.getUsername())) {
-			throw new CustomException(ResponseCode.DUPLICATE_USERNAME);
-		}
+    Object kakaoLogin(KakaoLoginRequest request); // 카카오 로그인
 
-		// 중복 닉네임 검사
-		if (memberRepository.existsByNickname(request.getNickname())) {
-			throw new CustomException(ResponseCode.DUPLICATE_NICKNAME);
-		}
+    String withdrawMember(UserDetails userDetails); // 회원 탈퇴
 
-		// 중복 전화번호 검사
-		if (memberRepository.existsByPhoneNumber(request.getPhoneNumber())) {
-			throw new CustomException(ResponseCode.DUPLICATE_PHONE_NUMBER);
-		}
-
-		// 비밀번호 암호화
-		String encodedPassword = passwordEncoder.encode(request.getPassword());
-
-		// User 객체 생성
-		Member member = Member.builder()
-				.username(request.getUsername())
-				.password(encodedPassword) // 암호화된 비밀번호만 저장하기
-				.phoneNumber(request.getPhoneNumber())
-				.nickname(request.getNickname())
-				.email(request.getEmail())
-				.birthdate(LocalDate.parse(request.getBirthdate()))
-				.name(request.getName())
-				.mobileCarrier(request.getMobileCarrier())
-				.socialType(request.getSocialType())
-				.socialId(request.getSocialId())
-				.role(Role.ROLE_USER) // 기본 권한 추가, enum 객체 넘기기
-				.build();
-
-		memberRepository.save(member);
-
-		return "회원가입에 성공하였습니다!";
-	}
-
-	public LoginResponse login(LoginRequest request) {
-		String username = request.getUsername();
-
-		Member member = memberRepository.findByUsername(username)
-			.orElseThrow(() -> new CustomException(ResponseCode.USER_NOT_FOUND));
-
-		if (!passwordEncoder.matches(request.getPassword(), member.getPassword())) {
-			throw new CustomException(ResponseCode.WRONG_PASSWORD);
-		}
-
-		String accessToken = jwtUtil.createAccessToken(username);
-		String refreshToken = jwtUtil.createRefreshToken(username);
-
-		return new LoginResponse(accessToken, refreshToken);
-	}
-
-
-	public String findId(FindIdRequest request) {
-		// 유효성 체크
-		if (request.getName() == null || request.getPhoneNumber() == null || request.getBirthdate() == null) {
-			throw new CustomException(ResponseCode.INVALID_INPUT);
-		}
-
-		// 회원 조회
-		Member member = memberRepository.findByNameAndPhoneNumberAndBirthdate(
-				request.getName(),
-				request.getPhoneNumber(),
-				request.getBirthdate()).orElseThrow(() -> new CustomException(ResponseCode.USER_NOT_FOUND));
-
-		return member.getUsername();
-	}
-
-	public void sendResetPasswordMail(FindPwRequest request) {
-	}
-
-	public ProfileResponse getProfileByNickname(String nickname) {
-
-		// 닉네임 유효성 체크
-		if (nickname == null || nickname.isBlank()) {
-			throw new CustomException(ResponseCode.INVALID_INPUT);
-		}
-
-		// 회원 조회
-		Member member = memberRepository.findByNickname(nickname)
-				.orElseThrow(() -> new CustomException(ResponseCode.USER_NOT_FOUND));
-
-		// 프로필 응답 생성
-		return ProfileResponse.builder()
-				.introduction(member.getIntroduction())
-				.birthdate(member.getBirthdate())
-				.build();
-	}
-
-	public void updateProfile(UpdateProfileRequest request) {
-	}
-
-
-	@Transactional
-	public String withdrawMember(UserDetails userDetails) {
-		String username = userDetails.getUsername();
-
-		Member member = memberRepository.findByUsername(username)
-			.orElseThrow(() -> new CustomException(ResponseCode.USER_NOT_FOUND));
-
-		if (member.getState() == State.WITHDRAWN) {
-			throw new CustomException(ResponseCode.ALREADY_WITHDRAWN);
-		}
-
-		member.withdraw();
-
-		return "회원 탈퇴가 완료되었습니다.";
-	}
-
-
-	
-	public Member findByUsername(String username) {
-	    return memberRepository.findByUsername(username)
-	            .orElseThrow(() -> new CustomException(ResponseCode.USER_NOT_FOUND));
-	}
-
+    Member findByUsername(String username); // 유저 이름으로 Member 조회
 }
