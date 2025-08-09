@@ -144,7 +144,7 @@ public class MemberController {
 	public ResponseEntity<ApiResponse<?>> kakaoLogin(@RequestBody KakaoLoginRequest request) {
 		return ResponseEntity.ok(ApiResponse.success(ResponseCode.SUCCESS, memberService.kakaoLogin(request)));
   }
-  
+
 	/**
 	 * [자신 프로필 조회]
 	 * 게시판 작성자 이름 확인 시 자신의 닉네임을 확인할 수 있다
