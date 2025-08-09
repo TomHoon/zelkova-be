@@ -24,7 +24,7 @@ public interface MemberService {
     ProfileResponse getProfileByNickname(String nickname); // 닉네임으로 프로필 조회
 
     void updateProfile(UpdateProfileRequest request); // 프로필 수정
-  
+    
     Object kakaoLogin(KakaoLoginRequest request); // 카카오 로그인
 
     String withdrawMember(UserDetails userDetails); // 회원 탈퇴
