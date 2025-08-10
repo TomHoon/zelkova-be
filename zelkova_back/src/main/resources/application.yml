@@ -1,0 +1,29 @@
+spring:
+  application:
+    name: zelkova
+
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    # url: jdbc:mariadb://192.168.0.10:3307/tree
+    url: jdbc:mariadb://172.19.0.2:3306/tree
+    username: root
+    password: 1234
+    hikari: # DB Pool Size
+      minimum-idle: 2
+      maximum-pool-size: 5
+  jpa:
+    hibernate:
+      #ddl option: none || validate || update | create | create-drop
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+    show-sql: true
+
+server:
+  port: 26000
+  servlet:
+    encoding:
+      charset: UTF-8
+      force: true
+      enabled: true

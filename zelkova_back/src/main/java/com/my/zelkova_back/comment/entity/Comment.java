@@ -27,7 +27,8 @@ import lombok.Setter;
 
 @Entity
 @Table(name = "comment")
-@Getter @Setter
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -49,6 +50,7 @@ public class Comment {
 	private String content;
 
 	@Column(nullable = false)
+	@Builder.Default
 	private LocalDateTime createdAt = LocalDateTime.now();
 
 	private LocalDateTime updatedAt;
@@ -56,6 +58,7 @@ public class Comment {
 	private LocalDateTime deletedAt;
 
 	@Column(nullable = false)
+	@Builder.Default
 	private Boolean isDeleted = false;
 
 	@OneToMany(mappedBy = "comment", cascade = CascadeType.ALL, orphanRemoval = true)
