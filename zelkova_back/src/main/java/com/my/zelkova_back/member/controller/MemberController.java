@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-
 import com.my.zelkova_back.auth.dto.LoginRequest;
 import com.my.zelkova_back.auth.dto.LoginResponse;
 import com.my.zelkova_back.common.response.ApiResponse;
@@ -23,7 +22,6 @@ import com.my.zelkova_back.member.dto.FindIdRequest;
 import com.my.zelkova_back.member.dto.FindPwRequest;
 import com.my.zelkova_back.member.dto.JoinRequest;
 import com.my.zelkova_back.member.dto.KakaoLoginRequest;
-import com.my.zelkova_back.member.dto.LoginRequest;
 import com.my.zelkova_back.member.dto.MeResponse;
 import com.my.zelkova_back.member.dto.ProfileResponse;
 import com.my.zelkova_back.member.dto.UpdateProfileRequest;
@@ -143,7 +141,7 @@ public class MemberController {
 	@PostMapping("/kakao-login")
 	public ResponseEntity<ApiResponse<?>> kakaoLogin(@RequestBody KakaoLoginRequest request) {
 		return ResponseEntity.ok(ApiResponse.success(ResponseCode.SUCCESS, memberService.kakaoLogin(request)));
-  }
+	}
 
 	/**
 	 * [자신 프로필 조회]
@@ -154,8 +152,8 @@ public class MemberController {
 	 */
 	@GetMapping("/me")
 	public ResponseEntity<ApiResponse<MeResponse>> getMyInfo(@AuthenticationPrincipal UserDetails userDetails) {
-	    String username = userDetails.getUsername();
-	    Member member = memberService.findByUsername(username); // 직접 조회
-	    return ResponseEntity.ok(ApiResponse.success(ResponseCode.SUCCESS, MeResponse.from(member)));
+		String username = userDetails.getUsername();
+		Member member = memberService.findByUsername(username); // 직접 조회
+		return ResponseEntity.ok(ApiResponse.success(ResponseCode.SUCCESS, MeResponse.from(member)));
 	}
 }

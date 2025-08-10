@@ -33,27 +33,28 @@ public class Reply {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "comment_id", nullable = false)
 	private Comment comment;
-	
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "member_id", nullable = false)
 	private Member member;
-	
-	@Column(nullable=false, columnDefinition ="TEXT")
+
+	@Column(nullable = false, columnDefinition = "TEXT")
 	private String content;
-	
+
 	@Column(nullable = false)
+	@Builder.Default
 	private LocalDateTime createdAt = LocalDateTime.now();
-	
+
 	private LocalDateTime updatedAt;
-	
+
 	private LocalDateTime deletedAt;
-	
+
 	@Column(nullable = false)
+	@Builder.Default
 	private Boolean isDeleted = false;
-	
-	
+
 }

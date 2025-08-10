@@ -34,6 +34,7 @@ public class Post {
 	private String content;
 
 	@Column(nullable = false)
+	@Builder.Default
 	private LocalDateTime createdAt = LocalDateTime.now();
 
 	private LocalDateTime updatedAt;
@@ -44,5 +45,6 @@ public class Post {
 	@Column(nullable = false)
 	private Boolean isDeleted = false;
 
+	@Builder.Default
 	private Integer viewCount = 0;
 }

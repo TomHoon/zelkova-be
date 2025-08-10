@@ -17,7 +17,8 @@ import lombok.Setter;
 
 @Entity
 @Table(name = "user")
-@Getter @Setter
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -54,12 +55,15 @@ public class User {
 	private String introduction;
 
 	@Column(nullable = false, length = 20)
-	private String role = "ROLE_USER";  // 기본값
+	@Builder.Default
+	private String role = "ROLE_USER"; // 기본값
 
 	@Column(nullable = false, length = 20)
+	@Builder.Default
 	private String state = "ACTIVE";
 
 	@Column(nullable = false)
+	@Builder.Default
 	private LocalDateTime createdAt = LocalDateTime.now();
 
 	private LocalDateTime updatedAt;

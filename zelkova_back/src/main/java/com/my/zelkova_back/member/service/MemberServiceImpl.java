@@ -1,10 +1,13 @@
 package com.my.zelkova_back.member.service;
 
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.my.zelkova_back.auth.dto.LoginRequest;
+import com.my.zelkova_back.auth.dto.LoginResponse;
 import com.my.zelkova_back.common.exception.CustomException;
 import com.my.zelkova_back.common.response.ResponseCode;
 import com.my.zelkova_back.member.dto.*;
@@ -163,7 +166,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public Object login(LoginRequest request) {
+    public LoginResponse login(LoginRequest request) {
         return null;
     }
 
@@ -173,5 +176,15 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public void updateProfile(UpdateProfileRequest request) {
+    }
+
+    @Override
+    public String withdrawMember(UserDetails userDetails) {
+        throw new UnsupportedOperationException("Unimplemented method 'withdrawMember'");
+    }
+
+    @Override
+    public Member findByUsername(String username) {
+        throw new UnsupportedOperationException("Unimplemented method 'findByUsername'");
     }
 }
